@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Submit to Google Sheet</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+  <h1>Submit Your Data</h1>
+  <form id="dataForm">
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name" required><br><br>
+    
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" required><br><br>
+    
+    <label for="message">Message:</label><br>
+    <textarea id="message" name="message" required></textarea><br><br>
+    
+    <button type="button" onclick="submitData()">Submit</button>
+  </form>
+
+  <script>
+    function submitData() {
+      const form = document.getElementById('dataForm');
+      const formData = new FormData(form);
+
+      const data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        message: formData.get('message')
+      };
+
+      fetch('https://script.google.com/macros/s/AKfycbyPRIxAv3hLzv8BHKHlgkdfkX7bQ1cCXjhh-fvcqH-UXgki7FesaCW0OttvS9e7m0g/exec9e7m0g/exec', {
+      redirect: "follow",
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8",
+      },
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then(data => {
+        alert(data.message);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to submit data. Check console for details.');
+      });
+    }
+  </script>
+</body>
+</html>
